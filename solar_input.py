@@ -50,7 +50,7 @@ def parse_star_parameters(line, star):
     line = line.split()
     star.m = float(line[3])
     star.color = line[2]
-    star.type = line[0]
+    star.type = 'star'
     star.x = float(line[4])
     star.y = float(line[5])
     star.vx = float(line[6])
@@ -81,6 +81,7 @@ def parse_planet_parameters(line, planet):
     planet.y = float(planet_data[5])
     planet.Vx = float(planet_data[6])
     planet.Vy = float(planet_data[7])
+    planet.type = 'planet'
     #данные о планете
     pass 
 
