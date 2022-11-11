@@ -53,8 +53,8 @@ def parse_star_parameters(line, star):
     star.type = 'star'
     star.x = float(line[4])
     star.y = float(line[5])
-    star.vx = float(line[6])
-    star.vy = float(line[7])
+    star.Yx = float(line[6])
+    star.Vy = float(line[7])
     star.R = float(line[1])
     pass
 
