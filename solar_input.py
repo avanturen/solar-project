@@ -45,14 +45,14 @@ def parse_star_parameters(line, star):
     """
 
     line = line.split()
-    star.m = line[3]
-    star.color = line[2]
-    star.type = line[0]
-    star.x = line[4]
-    star.y = line[5]
-    star.vx = line[6]
-    star.vy = line[7]
-    star.R = line[1]
+    Startar.m = line[3]
+    Star.color = line[2]
+    Star.type = line[0]
+    Star.x = line[4]
+    Star.y = line[5]
+    Star.vx = line[6]
+    Star.vy = line[7]
+    Star.R = line[1]
     pass
 
 
