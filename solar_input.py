@@ -55,6 +55,7 @@ def parse_planet_parameters(line, planet):
     planet.x = a[5]
     planet.Vx = a[6]
     planet.Vy = a[7]
+    #данные о планете
     pass  # FIXME: not done yet...
 
 
