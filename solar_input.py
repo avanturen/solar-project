@@ -69,13 +69,13 @@ def parse_planet_parameters(line, planet):
        **planet** — объект звезды.
        """
     a = line.split(" ")
-    planet.R = a[1]
+    planet.R = int(a[1])
     planet.color = a[2]
-    planet.m = a[3]
-    planet.x = a[4]
-    planet.x = a[5]
-    planet.Vx = a[6]
-    planet.Vy = a[7]
+    planet.m = int(a[3])
+    planet.x = int(a[4])
+    planet.y = int(a[5])
+    planet.Vx = int(a[6])
+    planet.Vy = int(a[7])
     #данные о планете
     pass 
 
