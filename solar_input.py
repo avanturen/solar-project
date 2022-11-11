@@ -23,7 +23,10 @@ def read_space_objects_data_from_file(input_filename):
                 star = Star()
                 parse_star_parameters(line, star)
                 objects.append(star)
-            else:
+            elif object_type == "planet":
+                planet = Planet()
+                parse_planet_parameters(line, planet)
+                objects.append(planet)
                 print("Unknown space object")
 
     return objects
@@ -48,11 +51,11 @@ def parse_star_parameters(line, star):
     star.m = float(line[3])
     star.color = line[2]
     star.type = line[0]
-    star.x = int(line[4])
-    star.y = int(line[5])
-    star.vx = int(line[6])
-    star.vy = int(line[7])
-    star.R = int(line[1])
+    star.x = float(line[4])
+    star.y = float(line[5])
+    star.vx = float(line[6])
+    star.vy = float(line[7])
+    star.R = float(line[1])
     pass
 
 
@@ -73,11 +76,11 @@ def parse_planet_parameters(line, planet):
     planet_data = line.split(" ")
     planet.R = float(planet_data[1])
     planet.color = planet_data[2]
-    planet.m = int(planet_data[3])
-    planet.x = int(planet_data[4])
-    planet.y = int(planet_data[5])
-    planet.Vx = int(planet_data[6])
-    planet.Vy = int(planet_data[7])
+    planet.m = float(planet_data[3])
+    planet.x = float(planet_data[4])
+    planet.y = float(planet_data[5])
+    planet.Vx = float(planet_data[6])
+    planet.Vy = float(planet_data[7])
     #данные о планете
     pass 
 
