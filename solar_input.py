@@ -54,6 +54,19 @@ def parse_star_parameters(line, star):
     pass  # FIXME: not done yet
 
 def parse_planet_parameters(line, planet):
+    """Считывает данные о планете из строки.
+       Входная строка должна иметь слеюущий формат:
+       Star <радиус в пикселах> <цвет> <масса> <x> <y> <Vx> <Vy>
+
+       Здесь (x, y) — координаты планеты, (Vx, Vy) — скорость.
+       Пример строки:
+       Planet 10 red 1000 1 2 3 4
+
+       Параметры:
+
+       **line** — строка с описанием планеты.
+       **planet** — объект звезды.
+       """
     a = line.split(" ")
     planet.R = a[1]
     planet.color = a[2]
