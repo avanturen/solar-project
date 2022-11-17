@@ -1,6 +1,6 @@
 # coding: utf-8
 # license: GPLv3
-
+import pandas as pd
 import tkinter
 from tkinter.filedialog import *
 from solar_vis import *
@@ -24,7 +24,7 @@ time_step = None
 
 space_objects = []
 """Список космических объектов."""
-
+df = pd.DataFrame(columns=['t', 'r'])
 
 def execution():
     """Функция исполнения -- выполняется циклически, вызывая обработку всех небесных тел,
@@ -37,7 +37,12 @@ def execution():
     recalculate_space_objects_positions(space_objects, time_step.get())
     for body in space_objects:
         update_object_position(space, body)
+    if len(space_objects) == 2:
+        new_row = [float(physical_time), float((body.x ** 2 + body.y ** 2) ** 0.5)]
+        df.loc[len(df.index)] = new_row
     physical_time += time_step.get()
+
+
     displayed_time.set("%.1f" % physical_time + " seconds gone")
 
     if perform_execution:
@@ -65,6 +70,9 @@ def stop_execution():
     perform_execution = False
     start_button['text'] = "Start"
     start_button['command'] = start_execution
+    df.plot(x="t", y="r")
+
+    df.to_csv("stat.csv")
     print('Paused execution.')
 
 
