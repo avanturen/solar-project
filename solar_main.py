@@ -1,15 +1,17 @@
 # coding: utf-8
 # license: GPLv3
+import math
 import pandas as pd
 import tkinter
 from tkinter.filedialog import *
 from solar_vis import *
 from solar_model import *
 from solar_input import *
+from statictic import *
 
 perform_execution = False
 """Флаг цикличности выполнения расчёта"""
-
+scale_factor = None
 physical_time = 0
 """Физическое время от начала расчёта.
 Тип: float"""
@@ -40,13 +42,21 @@ def execution():
     for body in space_objects:
         update_object_position(space, body)
 
+    if len(space_objects) == 2 and (space_objects[0].type == 'planet' or space_objects[1].type == 'planet'):
+        get_data(space_objects, physical_time)
     physical_time += time_step.get()
 
     displayed_time.set("%.1f" % physical_time + " seconds gone")
 
     if perform_execution:
-        space.after(30 - int(time_speed.get()/4), execution)
+        space.after(101 - int(time_speed.get()), execution)
 
+
+def get_max_speed():
+    velocity = []
+    for body in space_objects:
+        velocity.append((body.Vx**2 + body.Vy**2)**0.5)
+    return max(velocity)*scale_factor
 
 def start_execution():
     """Обработчик события нажатия на кнопку Start.
@@ -57,8 +67,7 @@ def start_execution():
     perform_execution = True
     start_button['text'] = "Pause"
     start_button['command'] = stop_execution
-    if (space_objects[1].Vx ** 2 + space_objects[1].Vy ** 2) ** 0.5 < 30000:
-        time_step.set(10000)
+    time_step.set(math.ceil(0.02/get_max_speed()))
     execution()
     print('Started execution...')
 
@@ -71,6 +80,10 @@ def stop_execution():
     perform_execution = False
     start_button['text'] = "Start"
     start_button['command'] = start_execution
+    save_data()
+    save_plots('time', 'velocity')
+    save_plots('time', 'distance')
+    save_plots('distance', 'velocity')
     print('Paused execution.')
 
 
@@ -79,6 +92,7 @@ def open_file_dialog():
     функцию считывания параметров системы небесных тел из данного файла.
     Считанные объекты сохраняются в глобальный список space_objects
     """
+    global scale_factor
     global space_objects
     global perform_execution
     perform_execution = False
@@ -87,7 +101,7 @@ def open_file_dialog():
     in_filename = askopenfilename(filetypes=(("Text file", ".txt"),))
     space_objects = read_space_objects_data_from_file(in_filename)
     max_distance = max([max(abs(obj.x), abs(obj.y)) for obj in space_objects])
-    calculate_scale_factor(max_distance)
+    scale_factor = calculate_scale_factor(max_distance)
 
     for obj in space_objects:
         if obj.type == 'star':
@@ -139,6 +153,7 @@ def main():
 
     time_speed = tkinter.DoubleVar()
     scale = tkinter.Scale(frame, variable=time_speed, orient=tkinter.HORIZONTAL)
+    time_speed.set(100)
     scale.pack(side=tkinter.LEFT)
 
     load_file_button = tkinter.Button(frame, text="Open file...", command=open_file_dialog)
