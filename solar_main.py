@@ -7,6 +7,7 @@ from tkinter.filedialog import *
 from solar_vis import *
 from solar_model import *
 from solar_input import *
+from statictic import *
 
 perform_execution = False
 """Флаг цикличности выполнения расчёта"""
@@ -42,10 +43,7 @@ def execution():
         update_object_position(space, body)
 
     if len(space_objects) == 2 and (space_objects[0].type == 'planet' or space_objects[1].type == 'planet'):
-        new_row = [(body.Vx ** 2 + body.Vy ** 2) ** 0.5, float(physical_time),
-                   float((body.x ** 2 + body.y ** 2) ** 0.5)]
-
-        df.loc[len(df.index)] = new_row
+        get_data(space_objects, physical_time)
     physical_time += time_step.get()
 
     displayed_time.set("%.1f" % physical_time + " seconds gone")
@@ -82,6 +80,10 @@ def stop_execution():
     perform_execution = False
     start_button['text'] = "Start"
     start_button['command'] = start_execution
+    save_data()
+    save_plots('time', 'velocity')
+    save_plots('time', 'distance')
+    save_plots('distance', 'velocity')
     print('Paused execution.')
 
 
