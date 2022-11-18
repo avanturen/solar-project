@@ -39,7 +39,7 @@ def execution():
     for body in space_objects:
         update_object_position(space, body)
     if len(space_objects) == 2 and (space_objects[0].type=='planet' or space_objects[1].type=='planet'):
-        new_row = [(body.Vx**2+body.Vy**2)**0,5,float(physical_time), float((body.x ** 2 + body.y ** 2) ** 0.5)]
+        new_row = [(body.Vx**2+body.Vy**2)**0.5,float(physical_time), float((body.x ** 2 + body.y ** 2) ** 0.5)]
 
         df.loc[len(df.index)] = new_row
     physical_time += time_step.get()
