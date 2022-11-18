@@ -6,7 +6,7 @@ from tkinter.filedialog import *
 from solar_vis import *
 from solar_model import *
 from solar_input import *
-from statictic import *
+
 perform_execution = False
 """Флаг цикличности выполнения расчёта"""
 
@@ -24,6 +24,9 @@ time_step = None
 
 space_objects = []
 """Список космических объектов."""
+df = pd.DataFrame(columns=['v', 't', 'r'])
+'''таблица для построения второгоо графика'''
+
 
 def execution():
     """Функция исполнения -- выполняется циклически, вызывая обработку всех небесных тел,
@@ -36,10 +39,13 @@ def execution():
     recalculate_space_objects_positions(space_objects, time_step.get())
     for body in space_objects:
         update_object_position(space, body)
-    if len(space_objects) == 2 and (space_objects[0].type=='planet' or space_objects[1].type=='planet'):
-        get_data(space_objects, physical_time)
-    physical_time += time_step.get()
 
+    if len(space_objects) == 2 and (space_objects[0].type == 'planet' or space_objects[1].type == 'planet'):
+        new_row = [(body.Vx ** 2 + body.Vy ** 2) ** 0.5, float(physical_time),
+                   float((body.x ** 2 + body.y ** 2) ** 0.5)]
+
+        df.loc[len(df.index)] = new_row
+    physical_time += time_step.get()
 
     displayed_time.set("%.1f" % physical_time + " seconds gone")
 
@@ -51,11 +57,13 @@ def start_execution():
     """Обработчик события нажатия на кнопку Start.
     Запускает циклическое исполнение функции execution.
     """
+    global time_step
     global perform_execution
     perform_execution = True
     start_button['text'] = "Pause"
     start_button['command'] = stop_execution
-
+    if (space_objects[1].Vx ** 2 + space_objects[1].Vy ** 2) ** 0.5 < 30000:
+        time_step.set(10000)
     execution()
     print('Started execution...')
 
@@ -68,10 +76,12 @@ def stop_execution():
     perform_execution = False
     start_button['text'] = "Start"
     start_button['command'] = start_execution
-    save_data()
-    save_plots('time', 'velocity')
-    save_plots('time', 'distance')
-    save_plots('distance', 'velocity')
+    df.plot(x="t", y="r")
+    df.to_csv("tr.csv")
+    df.plot(x="t", y="v")
+    df.to_csv("tv.csv")
+    df.plot(x="r", y="v")
+    df.to_csv("rv.csv")
     print('Paused execution.')
 
 
@@ -154,6 +164,7 @@ def main():
 
     root.mainloop()
     print('Modelling finished!')
+
 
 if __name__ == "__main__":
     main()
