@@ -67,7 +67,7 @@ def start_execution():
     perform_execution = True
     start_button['text'] = "Pause"
     start_button['command'] = stop_execution
-    time_step.set(math.ceil(0.02/get_max_speed()))
+    time_step.set(math.ceil(0.1/get_max_speed()))
     execution()
     print('Started execution...')
 
