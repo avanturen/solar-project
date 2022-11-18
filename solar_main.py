@@ -44,6 +44,8 @@ def execution():
 
     if len(space_objects) == 2 and (space_objects[0].type == 'planet' or space_objects[1].type == 'planet'):
         get_data(space_objects, physical_time)
+
+    
     physical_time += time_step.get()
 
     displayed_time.set("%.1f" % physical_time + " seconds gone")
@@ -67,7 +69,7 @@ def start_execution():
     perform_execution = True
     start_button['text'] = "Pause"
     start_button['command'] = stop_execution
-    time_step.set(math.ceil(0.02/get_max_speed()))
+    time_step.set(math.ceil(0.06/get_max_speed()))
     execution()
     print('Started execution...')
 
