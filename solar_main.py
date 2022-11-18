@@ -24,7 +24,8 @@ time_step = None
 
 space_objects = []
 """Список космических объектов."""
-df = pd.DataFrame(columns=['t', 'r'])
+df = pd.DataFrame(columns=['v','t', 'r'])
+'''таблица для построения второгоо графика'''
 
 def execution():
     """Функция исполнения -- выполняется циклически, вызывая обработку всех небесных тел,
@@ -37,8 +38,9 @@ def execution():
     recalculate_space_objects_positions(space_objects, time_step.get())
     for body in space_objects:
         update_object_position(space, body)
-    if len(space_objects) == 2:
-        new_row = [float(physical_time), float((body.x ** 2 + body.y ** 2) ** 0.5)]
+    if len(space_objects) == 2 and (space_objects[0].type=='planet' or space_objects[1].type=='planet'):
+        new_row = [(body.Vx**2+body.Vy**2)**0,5,float(physical_time), float((body.x ** 2 + body.y ** 2) ** 0.5)]
+
         df.loc[len(df.index)] = new_row
     physical_time += time_step.get()
 
@@ -71,8 +73,11 @@ def stop_execution():
     start_button['text'] = "Start"
     start_button['command'] = start_execution
     df.plot(x="t", y="r")
-
-    df.to_csv("stat.csv")
+    df.to_csv("tr.csv")
+    df.plot(x="t", y="v")
+    df.to_csv("tv.csv")
+    df.plot(x="r", y = "v")
+    df.to_csv("rv.csv")
     print('Paused execution.')
 
 
