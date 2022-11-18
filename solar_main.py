@@ -82,11 +82,12 @@ def stop_execution():
     perform_execution = False
     start_button['text'] = "Start"
     start_button['command'] = start_execution
-    save_data()
-    save_plots('time', 'velocity')
-    save_plots('time', 'distance')
-    save_plots('distance', 'velocity')
-    print('Paused execution.')
+    if len(space_objects) == 2 and (space_objects[0].type == 'planet' or space_objects[1].type == 'planet'):
+        save_data()
+        save_plots('time', 'velocity')
+        save_plots('time', 'distance')
+        save_plots('distance', 'velocity')
+        print('Paused execution.')
 
 
 def open_file_dialog():
